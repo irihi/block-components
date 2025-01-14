@@ -44,7 +44,7 @@ export const prepareSearchQuery = ({
 	perPage,
 	contentTypes,
 	queryFilter,
-}: PrepareSearchQueryArgs): string => {
+}: PrepareSearchQueryArgs, posttype = 'post'): string => {
 	let searchQuery;
 
 	switch (mode) {
@@ -54,7 +54,8 @@ export const prepareSearchQuery = ({
 			});
 			break;
 		default:
-			searchQuery = addQueryArgs('wp/v2/search', {
+			const apiBaseUrl = `wp/v2/${posttype == 'post' ? 'search' : `${posttype}/search`}`;
+			searchQuery = addQueryArgs(apiBaseUrl, {
 				search: keyword,
 				subtype: contentTypes.join(','),
 				type: mode,
@@ -142,7 +143,7 @@ export async function fetchSearchResults({
 	contentTypes,
 	queryFilter,
 	excludeItems,
-}: FetchSearchResultsArgs) {
+}: FetchSearchResultsArgs, posttype: string | undefined) {
 	const searchQueryString = prepareSearchQuery({
 		keyword,
 		page,
@@ -150,7 +151,7 @@ export async function fetchSearchResults({
 		perPage,
 		contentTypes,
 		queryFilter,
-	});
+	}, posttype);
 	const response = await apiFetch<Response>({
 		path: searchQueryString,
 		parse: false,

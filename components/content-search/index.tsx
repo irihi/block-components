@@ -84,6 +84,7 @@ export interface ContentSearchProps {
 	renderItemType?: (props: NormalizedSuggestion) => string;
 	renderItem?: (props: RenderItemComponentProps) => JSX.Element;
 	fetchInitialResults?: boolean;
+	posttype?: string;
 }
 
 const ContentSearch: React.FC<ContentSearchProps> = ({
@@ -101,6 +102,7 @@ const ContentSearch: React.FC<ContentSearchProps> = ({
 	renderItemType = undefined,
 	renderItem: SearchResultItem = SearchItem,
 	fetchInitialResults,
+	posttype
 }) => {
 	const [searchString, setSearchString] = useState('');
 	const [isFocused, setIsFocused] = useState(false);
@@ -130,7 +132,7 @@ const ContentSearch: React.FC<ContentSearchProps> = ({
 					contentTypes,
 					queryFilter,
 					excludeItems,
-				}),
+				}, posttype),
 			getNextPageParam: (lastPage) => lastPage.nextPage,
 			getPreviousPageParam: (firstPage) => firstPage.previousPage,
 			initialPageParam: 1,
